@@ -1,0 +1,13 @@
+node_modules/
+
+*.log
+*.iml
+.idea/
+.gitignore~
+
+.DS_Store
+
+node_modules
+matlab-code
+
+*.pem

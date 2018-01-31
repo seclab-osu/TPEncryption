@@ -1,0 +1,29 @@
+{
+  "manifest_version": 2,
+  "background" : { "scripts": ["background.js"] },
+  "description": "Thumbnail Preserving Image Encryption Tool",
+  "icons": {
+    "128": "icon.png"
+  },
+
+  "browser_action": {
+    "default_icon": {
+      "16": "icon.png"
+    },
+    "default_title": "Thumb",
+    "default_popup": "popup.html"
+  },
+
+  "content_scripts": [
+    {
+      "matches":["http://*/*", "https://*/*"],
+      "js":["content_script.js"],
+      "run_at" : "document_end"
+    }
+  ],
+
+  "minimum_chrome_version": "6",
+  "name": "Image Encryption Tool",
+  "permissions": [ "contextMenus", "tabs", "http://*/*", "https://*/*", "activeTab", "storage"],
+  "version": "1.0"
+}
