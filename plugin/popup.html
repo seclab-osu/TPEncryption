@@ -1,5 +1,6 @@
 <!doctype html>
 <html>
+
 <head>
     <title>TPEncryption Plugin</title>
     <style type="text/css">
@@ -19,9 +20,13 @@
         }
 
         /* Float the list items side by side */
-        ul.tab li {float: left;}
+
+        ul.tab li {
+            float: left;
+        }
 
         /* Style the links inside the list items */
+
         ul.tab li a {
             display: inline-block;
             color: black;
@@ -34,12 +39,20 @@
         }
 
         /* Change background color of links on hover */
-        ul.tab li a:hover {background-color: #ddd;}
+
+        ul.tab li a:hover {
+            background-color: #ddd;
+        }
 
         /* Create an active/current tablink class */
-        ul.tab li a:focus, .active {background-color: #ccc;}
+
+        ul.tab li a:focus,
+        .active {
+            background-color: #ccc;
+        }
 
         /* Style the tab content */
+
         .tabcontent {
             display: none;
             padding: 6px 12px;
@@ -51,51 +64,67 @@
         }
     </style>
 </head>
+
 <body style="width: 480px;height: 400px;">
 
 
-<ul class="tab">
-    <li><a class="tablinks active" id="IMAGES_LINK">MY IMAGES</a></li>
-    <li><a class="tablinks" id="ADD_IMAGE_LINK">UPLOAD</a></li>
-    <li><a class="tablinks" id="SETTINGS_LINK">DOWNLOAD</a></li>
-</ul>
+    <ul class="tab">
+        <li>
+            <a class="tablinks active" id="IMAGES_LINK">MY IMAGES</a>
+        </li>
+        <li>
+            <a class="tablinks" id="ADD_IMAGE_LINK">UPLOAD</a>
+        </li>
+        <li>
+            <a class="tablinks" id="SETTINGS_LINK">DOWNLOAD</a>
+        </li>
+    </ul>
 
-<div id="IMAGES" class="tabcontent" style="display: block;background-color: white;">
-    <h3>Your images<a href="#" type="button" id="remove_images" style="float:right;font-size:12px;display:inline-block;border-radius: 0px;margin-left:10px;" >remove all</a></h3>
-    <p>Here you can see list of your images.</p>
-    <div id="my_images"></div>
-</div>
+    <div id="IMAGES" class="tabcontent" style="display: block;background-color: white;">
+        <h3>Your images
+            <a href="#" type="button" id="remove_images" style="float:right;font-size:12px;display:inline-block;border-radius: 0px;margin-left:10px;">remove all</a>
+        </h3>
+        <p>Here you can see list of your images.</p>
+        <div id="my_images"></div>
+    </div>
 
-<div id="ADD_IMAGE" class="tabcontent">
-    <h3>Add image</h3>
-    <p>Browse your secret image, encrypt it and then upload it in the cloud storage.</p>
-    <input type="file" id="browse" value="Browse an image" accept="image/*" style="border: 0px solid;outline: none;width: 35%;margin-bottom: 10px;"/>
-    <span style="display: inline-block;margin-left: 10px;color:green;" id="status"></span>
-    <br style="margin-bottom: 50px;"/>
-    <input type="number" id="iter" min="1" max="100" placeholder="#iterations" style="width: 20%;border-radius: 0px;"/>
-    <input type="number" id="block-size" min="5" max="1000" placeholder="block size" style="width: 20%;border-radius: 0px;"/>
-    <input type="button" id="encrypt" value="Encrypt" style="width: 20%;border-radius: 0px;" />
-    <input type="button" id="upload" value="Upload" style="width: 20%;border-radius: 0px;" />
-    <br/><br/><br/>
-    <canvas id="canvas" width="200" height="200" style="border: 1px solid gray; margin: 0 0 0 10px;width: 40%"></canvas>
-    <canvas id="canvas_thumb" width="200" height="200" style="border: 1px solid gray; margin: 0 0 0 10px;width: 40%;vertical-align: top;"></canvas>
-</div>
+    <div id="ADD_IMAGE" class="tabcontent">
+        <h3>Add image</h3>
+        <p>Browse your secret image, encrypt it and then upload it in the cloud storage.</p>
+        <input type="file" id="browse" value="Browse an image" accept="image/*" style="border: 0px solid;outline: none;width: 35%;margin-bottom: 10px;"
+        />
+        <span style="display: inline-block;margin-left: 10px;color:green;" id="status"></span>
+        <br style="margin-bottom: 50px;" />
+        <input type="number" id="iter" min="1" max="100" placeholder="#iterations" style="width: 20%;border-radius: 0px;" />
+        <input type="number" id="block-size" min="5" max="1000" placeholder="block size" style="width: 20%;border-radius: 0px;" />
+        <input type="button" id="encrypt" value="Encrypt" style="width: 20%;border-radius: 0px;" />
+        <input type="button" id="upload" value="Upload" style="width: 20%;border-radius: 0px;" />
+        <br/>
+        <br/>
+        <br/>
+        <canvas id="canvas" width="200" height="200" style="border: 1px solid gray; margin: 0 0 0 10px;width: 40%"></canvas>
+        <canvas id="canvas_thumb" width="200" height="200" style="border: 1px solid gray; margin: 0 0 0 10px;width: 40%;vertical-align: top;"></canvas>
+    </div>
 
-<div id="SETTINGS" class="tabcontent">
-    <h3>Download image</h3>
+    <div id="SETTINGS" class="tabcontent">
+        <h3>Download image</h3>
         <p>Browse your image, decrypt and download it.</p>
-    <select id="downloadable_images" style="width: 30%;"></select>
-    <span style="display: inline-block;margin-left: 10px;color:green;" id="status2"></span>
-    <br/>
-    <br/>
-    <input type="number" id="iter2" min="1" max="100" placeholder="#iterations" style="width: 20%;border-radius: 0px;"/>
-    <input type="number" id="block-size2" min="5" max="1000" placeholder="block size" style="width: 20%;border-radius: 0px;"/>
-    <input type="button" id="decrypt" value="Decrypt" style="width: 20%;border-radius: 0px;" />
-    <a href="#" type="button" id="downloadLink" value="Download" style="width: 20%;border-radius: 0px;margin-left:10px;" >Download</a>
-    <br/><br/><br/>
-    <canvas id="canvas_dl" width="200" height="200" style="border: 1px solid gray; margin: 0 0 0 110px;width: 50%"></canvas>
-</div>
+        <select id="downloadable_images" style="width: 30%;"></select>
+        <span style="display: inline-block;margin-left: 10px;color:green;" id="status2"></span>
+        <br/>
+        <br/>
+        <input type="number" id="iter2" min="1" max="100" placeholder="#iterations" style="width: 20%;border-radius: 0px;" />
+        <input type="number" id="block-size2" min="5" max="1000" placeholder="block size" style="width: 20%;border-radius: 0px;"
+        />
+        <input type="button" id="decrypt" value="Decrypt" style="width: 20%;border-radius: 0px;" />
+        <a href="#" type="button" id="downloadLink" value="Download" style="width: 20%;border-radius: 0px;margin-left:10px;">Download</a>
+        <br/>
+        <br/>
+        <br/>
+        <canvas id="canvas_dl" width="200" height="200" style="border: 1px solid gray; margin: 0 0 0 110px;width: 50%"></canvas>
+    </div>
 
-<script src="popup.js"></script>
+    <script src="popup.js"></script>
 </body>
+
 </html>
