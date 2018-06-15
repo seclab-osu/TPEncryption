@@ -1,8 +1,8 @@
-var get_google_auth_token = function (fn) {
-    chrome.identity.getAuthToken({ 'interactive': true }, function (token) {
-        fn(token);
-    });
-};
+// chrome.identity.getAuthToken({ 'interactive': true }, function (token) {
+// });
+
+// chrome.storage.sync.get(["iterations", "blocksize"], function (items) {
+// });
 
 function changeTab(evt, cityName) {
     // Declare all variables
@@ -28,13 +28,17 @@ function changeTab(evt, cityName) {
 function changeTab1() {
     changeTab(this, "AUTH");
     document.getElementById("AUTH_LINK").className += " active";
+
     var displayAuthStatus = function(token) {
         if(token)
             document.getElementById("auth_status").innerHTML = "Staus: Logged in";
         else
             document.getElementById("auth_status").innerHTML = "Staus: Error Authenticating";
     }
-    get_google_auth_token(displayAuthStatus);
+
+    chrome.identity.getAuthToken({'interactive': true}, function (token) {
+        displayAuthStatus(token);
+    });
 }
 
 function changeTab2() {
@@ -52,15 +56,104 @@ var div, div2;
 document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('browse').addEventListener('change', browse, false);
     // document.getElementById('downloadable_images').addEventListener('change', change_downloadable_images, false);
-    document.getElementById('encrypt').addEventListener('click', encrypt, false);
+    document.getElementById('en_up').addEventListener('click', encrypt, false);
     document.getElementById('decrypt').addEventListener('click', decrypt, false);
-    document.getElementById('upload').addEventListener('click', upload, false);
     document.getElementById('downloadLink').addEventListener('click', download, false);
     document.getElementById('AUTH_LINK').addEventListener('click', changeTab1, false);
     document.getElementById('UPLOAD_LINK').addEventListener('click', changeTab2, false);
     document.getElementById('DOWNLOAD_LINK').addEventListener('click', changeTab3, false);
 });
 
+// encrypt and upload stuff
+
+function encrypt() {
+    setUploadStatus("Encrypting");
+    chrome.storage.sync.get(["iterations", "blocksize"], function (items) {
+        setTimeout(function () {
+            console.log(items);
+            var x = new TPEncryption(div, "Example128BitKey");
+            x.encrypt(items.iterations, items.blocksize, function (time) {
+                setUploadStatus("Encrypted in: " + time + "ms");
+                upload();
+            });
+        }, 100);
+    });
+}
+
+var get_binary_data_from_canvas = function (canvas) {
+    var canvas = canvas;
+    return canvas.toDataURL();
+}
+
+var sendMediaItemRequest = function (token, uploadToken) {
+    var req = new XMLHttpRequest();
+    req.open('POST', 'https://photoslibrary.googleapis.com/v1/mediaItems:batchCreate', true);
+    req.setRequestHeader('Content-type', 'application/json');
+    req.setRequestHeader('Authorization', 'Bearer ' + token);
+    var payload = {
+        "newMediaItems": [{
+            "description": "tpeimage",
+            "simpleMediaItem": {
+                "uploadToken": uploadToken
+            }
+        }]
+    }
+    payload = JSON.stringify(payload);
+    req.onreadystatechange = function () {
+        var that = this;
+        if (that.readyState === 4 && that.status === 200) {
+            // ref https://developers.google.com/photos/library/guides/upload-media#item-creation-response
+            console.log("SUCCESS sendMediaItemRequest");
+            setUploadStatus("Upload Success");
+            debugger;
+        } else {
+            console.log("ERROR in sendMediaItemRequest");
+            setUploadStatus("Upload Failed at sendMediaItemRequest");
+        }
+    };
+    req.send(payload);
+};
+
+var sendImageBinary = function (token, binaryData) {
+    var time = new Date();
+    var req = new XMLHttpRequest();
+    req.open('POST', 'https://photoslibrary.googleapis.com/v1/uploads', true);
+    req.setRequestHeader('Content-type', 'application/octet-stream');
+    req.setRequestHeader('Authorization', 'Bearer ' + token);
+    req.setRequestHeader('X-Goog-Upload-File-Name', time.toJSON());
+    req.onreadystatechange = function () {
+        var that = this;
+        if (that.readyState === 4 && that.status === 200) {
+            // ref https://developers.google.com/photos/library/guides/upload-media#uploading-bytes
+            console.log("SUCCESS sendImageBinary");
+            console.log(that.responseText);
+            var uploadToken = this.response;
+            setUploadStatus("Uploaded Image Binary");
+            sendMediaItemRequest(token, uploadToken);
+        } else {
+            console.log("ERROR in sendImageBinary");
+            setUploadStatus("Upload Failed at sendImageBinary");
+        }
+    };
+    req.send(binaryData);
+};
+
+var setUploadStatus = function (status) {
+    var s = document.getElementById("upload_status");
+    s.innerHTML = "Upload Status: " + status;
+}
+
+var upload = function () {
+    chrome.identity.getAuthToken({
+        'interactive': true
+    }, function (token) {
+        var binaryData = get_binary_data_from_canvas(document.getElementById("canvas"));
+        setUploadStatus("uploading...");
+        sendImageBinary(token, binaryData)
+    });
+}
+
+// decrypt and download stuff
 
 var download = function () {
     var downloadLink = document.getElementById("downloadLink");
@@ -70,28 +163,6 @@ var download = function () {
     downloadLink.download = "download";
     console.log("downloaded?");
 };
-
-function encrypt() {
-    setUploadStatus("Encrypting");
-    var e = document.getElementById('block-size');
-    var size = e.value;
-    if (!size)
-        size = 25;
-    else
-        size = parseInt(size);
-    var e = document.getElementById('iter');
-    var iter = e.value;
-    if (!iter)
-        iter = 100;
-    else
-        iter = parseInt(iter);
-    setTimeout(function () {
-        var x = new TPEncryption(div, "Example128BitKey");
-        x.encrypt(iter, size, function (time) {
-            setUploadStatus("Encrypted in: " + time + "ms");
-        });
-    }, 100);
-}
 
 function draw(){
     var img = new Image();
@@ -127,81 +198,6 @@ function decrypt() {
         });
     }, 100);
 };
-
-var get_binary_data_from_canvas = function(canvas) {
-    var canvas = canvas;
-    return canvas.toDataURL();
-}
-
-var returnToken = function(token){
-    return token;
-}
-
-var sendMediaItemRequest = function(uploadToken){
-    var req = new XMLHttpRequest();
-    req.open('POST', 'https://photoslibrary.googleapis.com/v1/mediaItems:batchCreate', true);
-    req.setRequestHeader('Content-type', 'application/json');
-    req.setRequestHeader('Authorization', 'Bearer ' + get_google_auth_token(returnToken));
-    var payload = {
-        "newMediaItems": [
-            {
-                "description": "tpeimage",
-                "simpleMediaItem": {
-                    "uploadToken": uploadToken
-                }
-            }
-        ]
-    }
-    payload = JSON.stringify(payload);
-    req.onreadystatechange = function(){
-        var that = this;
-        if (that.readyState === 4 && that.status === 200) {
-            // ref https://developers.google.com/photos/library/guides/upload-media#item-creation-response
-            console.log("SUCCESS sendMediaItemRequest");
-            setUploadStatus("Upload Success");
-        } else {
-            console.log("ERROR in sendMediaItemRequest");
-            setUploadStatus("Upload Failed at sendMediaItemRequest");
-        }
-    };
-    req.send(payload);
-};
-
-var sendImageBinary = function(binaryData){
-    var time = new Date();
-    var req = new XMLHttpRequest();
-    req.open('POST', 'https://photoslibrary.googleapis.com/v1/uploads', true);
-    req.setRequestHeader('Content-type', 'application/octet-stream');
-    req.setRequestHeader('Authorization', 'Bearer ' + get_google_auth_token(returnToken));
-    req.setRequestHeader('X-Goog-Upload-File-Name', time.toJSON());
-    req.onreadystatechange = function(){
-        var that = this;
-        if (that.readyState === 4 && that.status === 200) {
-            // ref https://developers.google.com/photos/library/guides/upload-media#uploading-bytes
-            console.log("SUCCESS sendImageBinary");
-            console.log(that.responseText);
-            var uploadToken = this.response;
-            setUploadStatus("Uploaded Image Binary");
-            sendMediaItemRequest(uploadToken);
-        }
-        else {
-            console.log("ERROR in sendImageBinary");
-            setUploadStatus("Upload Failed at sendImageBinary");
-        }
-    };
-    req.send(binaryData);
-};
-
-var setUploadStatus = function(status){
-    var s = document.getElementById("upload_status");
-    s.innerHTML = "Upload Status: " + status;
-}
-
-var upload = function() {
-    var binaryData = get_binary_data_from_canvas(document.getElementById("canvas"));
-    setUploadStatus("uploading...");
-    sendImageBinary(binaryData)
-}
 
 function browse() {
     if (this.files && this.files[0]) {

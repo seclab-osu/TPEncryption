@@ -8,7 +8,6 @@
   "icons": {
     "128": "icon.png"
   },
-
   "browser_action": {
     "default_icon": {
       "16": "icon.png"
@@ -16,13 +15,12 @@
     "default_title": "Thumb",
     "default_popup": "popup.html"
   },
-
   "content_scripts": [{
     "matches": ["https://photos.google.com/*"],
     "js": ["content_script.js"],
     "run_at": "document_idle"
   }],
-
+  "options_page": "options.html",
   "minimum_chrome_version": "6",
   "name": "Image Encryption Tool",
   "permissions": ["contextMenus", "tabs", "http://*/*", "https://*/*", "activeTab", "storage", "identity"],
