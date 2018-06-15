@@ -79,11 +79,6 @@ function encrypt() {
     });
 }
 
-var get_binary_data_from_canvas = function (canvas) {
-    var canvas = canvas;
-    return canvas.toDataURL();
-}
-
 var sendMediaItemRequest = function (token, uploadToken) {
     var req = new XMLHttpRequest();
     req.open('POST', 'https://photoslibrary.googleapis.com/v1/mediaItems:batchCreate', true);
@@ -104,7 +99,10 @@ var sendMediaItemRequest = function (token, uploadToken) {
             // ref https://developers.google.com/photos/library/guides/upload-media#item-creation-response
             console.log("SUCCESS sendMediaItemRequest");
             setUploadStatus("Upload Success");
-            debugger;
+            var response = JSON.parse(that.response);
+            var url = response.newMediaItemResults[0].mediaItem.productUrl;
+            console.log("Uploaded at: "+ url);
+            setUploadStatus('<a href="'+url+'">Google Photos</a>');
         } else {
             console.log("ERROR in sendMediaItemRequest");
             setUploadStatus("Upload Failed at sendMediaItemRequest");
@@ -151,9 +149,11 @@ var upload = function () {
     chrome.identity.getAuthToken({
         'interactive': true
     }, function (token) {
-        var binaryData = get_binary_data_from_canvas(document.getElementById("canvas"));
+        var c = document.getElementById("canvas");
         setUploadStatus("uploading...");
-        sendImageBinary(token, binaryData)
+        c.toBlob(function(blob){
+            sendImageBinary(token, blob)
+        });
     });
 }
 
@@ -169,7 +169,7 @@ var setDownloadStat = function (stat) {
 }
 
 var download = function () {
-    var downloadLink = document.getElementById("de_dl");
+    var downloadLink = document.getElementById("dl_link");
     var x = document.getElementById("canvas_dl");
     var dt = x.toDataURL('image/png');
     downloadLink.href = dt;
