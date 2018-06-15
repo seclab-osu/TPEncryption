@@ -57,8 +57,7 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('browse').addEventListener('change', browse, false);
     // document.getElementById('downloadable_images').addEventListener('change', change_downloadable_images, false);
     document.getElementById('en_up').addEventListener('click', encrypt, false);
-    document.getElementById('decrypt').addEventListener('click', decrypt, false);
-    document.getElementById('downloadLink').addEventListener('click', download, false);
+    document.getElementById('de_dl').addEventListener('click', decrypt, false);
     document.getElementById('AUTH_LINK').addEventListener('click', changeTab1, false);
     document.getElementById('UPLOAD_LINK').addEventListener('click', changeTab2, false);
     document.getElementById('DOWNLOAD_LINK').addEventListener('click', changeTab3, false);
@@ -68,12 +67,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
 function encrypt() {
     setUploadStatus("Encrypting");
-    chrome.storage.sync.get(["iterations", "blocksize"], function (items) {
+    chrome.storage.sync.get(["iterations", "blocksize"], function (config) {
         setTimeout(function () {
-            console.log(items);
+            console.log(config);
             var x = new TPEncryption(div, "Example128BitKey");
-            x.encrypt(items.iterations, items.blocksize, function (time) {
-                setUploadStatus("Encrypted in: " + time + "ms");
+            x.encrypt(config.iterations, config.blocksize, function (time) {
+                setUploadStat(time + "ms");
                 upload();
             });
         }, 100);
@@ -143,6 +142,11 @@ var setUploadStatus = function (status) {
     s.innerHTML = "Upload Status: " + status;
 }
 
+var setUploadStat = function (stat) {
+    var s = document.getElementById("upload_stat");
+    s.innerHTML = stat;
+}
+
 var upload = function () {
     chrome.identity.getAuthToken({
         'interactive': true
@@ -154,17 +158,29 @@ var upload = function () {
 }
 
 // decrypt and download stuff
+var setDownloadStatus = function (status) {
+    var s = document.getElementById("download_status");
+    s.innerHTML = "Download Status: " + status;
+}
+
+var setDownloadStat = function (stat) {
+    var s = document.getElementById("download_stat");
+    s.innerHTML = stat;
+}
 
 var download = function () {
-    var downloadLink = document.getElementById("downloadLink");
+    var downloadLink = document.getElementById("de_dl");
     var x = document.getElementById("canvas_dl");
     var dt = x.toDataURL('image/png');
     downloadLink.href = dt;
     downloadLink.download = "download";
-    console.log("downloaded?");
+    setDownloadStatus("Downloading...")
+    console.log("Downloding...");
+    downloadLink.click();
+    setDownloadStatus("Done!");
 };
 
-function draw(){
+var draw = function () {
     var img = new Image();
     img.onload = function () {
         div = document.getElementById("canvas_dl");
@@ -177,26 +193,17 @@ function draw(){
 
 function decrypt() {
     draw()
-    var d = document.getElementById("status2");
-    d.innerHTML = "running ...";
-    var e = document.getElementById('block-size2');
-    var size = e.value;
-    if (!size)
-        size = 25;
-    else
-        size = parseInt(size);
-    var e = document.getElementById('iter2');
-    var iter = e.value;
-    if (!iter)
-        iter = 1;
-    else
-        iter = parseInt(iter);
-    setTimeout(function () {
-        var x = new TPEncryption(div, "Example128BitKey");
-        x.decrypt(iter, size, function (time) {
-            d.innerHTML = "rune-time: " + (time) + " ms";
-        });
-    }, 100);
+    setDownloadStatus("decrypting...")
+    chrome.storage.sync.get(["iterations", "blocksize"], function (config) {
+        setTimeout(function () {
+            console.log(config);
+            var x = new TPEncryption(div, "Example128BitKey");
+            x.decrypt(config.iterations, config.blocksize, function (time) {
+                setDownloadStat(time + "ms");
+                download();
+            });
+        }, 100);
+    });
 };
 
 function browse() {

@@ -91,6 +91,7 @@
         <input type="file" id="browse" value="Browse an image" accept="image/*" style="border: 0px solid;outline: none;width: 35%;margin-bottom: 10px;"
         />
         <span style="display: inline-block;margin-left: 10px;color:green;" id="upload_status"></span>
+        <span style="display: inline-block;margin-left: 10px;color:green;" id="upload_stat"></span>
         <br style="margin-bottom: 50px;" />
         <input type="button" id="en_up" value="Encrypt & Upload" style="width: 40%;border-radius: 0px;" />
         <br/>
@@ -105,13 +106,11 @@
         <p>Decrypt and download your image.</p>
         <!-- <select id="downloadable_images" style="width: 30%;"></select> -->
         <input type="text" id="img_url" placeholder="image url" style="width: 60%;border-radius: 0px;" />
-        <span style="display: inline-block;margin-left: 10px;color:green;" id="status2"></span>
+        <span style="display: inline-block;margin-left: 10px;color:green;" id="download_status"></span>
+        <span style="display: inline-block;margin-left: 10px;color:green;" id="download_stat"></span>
         <br/>
         <br/>
-        <input type="number" id="iter2" min="1" max="100" placeholder="#iterations" style="width: 20%;border-radius: 0px;"/>
-        <input type="number" id="block-size2" min="5" max="1000" placeholder="block size" style="width: 20%;border-radius: 0px;"/>
-        <input type="button" id="decrypt" value="Decrypt" style="width: 30%;border-radius: 0px;" />
-        <a href="#" type="button" id="downloadLink" value="Download" style="width: 20%;border-radius: 0px;margin-left:10px;">Download</a>
+        <a href="#" type="button" id="de_dl" value="Decrypt & Download" style="width: 40%;border-radius: 0px;margin-left:10px;">Decrypt & Download</a>
         <br/>
         <br/>
         <br/>
