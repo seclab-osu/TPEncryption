@@ -1,5 +1,4 @@
 function changeTab(evt, cityName) {
-    console.log("***** in popup.js changeTab");
     // Declare all variables
     var i, tabcontent, tablinks;
 
@@ -21,81 +20,40 @@ function changeTab(evt, cityName) {
 }
 
 function changeTab1() {
-    console.log("***** in popup.js changeTab1");
-    changeTab(this, "IMAGES");
-    chrome.storage.sync.get(['tp_images_thumb'], function (items) {
-        document.getElementById("my_images").innerHTML = "";
-        console.log('Settings retrieved', items.tp_images_thumb);
-        for (var i = 0; i < items.tp_images_thumb.length; i += 1) {
-            var x = document.createElement("IMG");
-            x.src = items.tp_images_thumb[i];
-            x.width = "100";
-            x.style.width = "95px";
-            x.style.height = "95px";
-            x.style.margin = "5px";
-            x.style.border = "1px solid gray";
-            var z = document.createElement("A");
-            z.href = x.src;
-            z.appendChild(x);
-            z.target = "_blank";
-            //z.style.border = "0px solid white";
-            document.getElementById("my_images").appendChild(z);
-        }
+    changeTab(this, "AUTH");
+    document.getElementById("AUTH_LINK").className += " active";
+    chrome.identity.getAuthToken({'interactive': true}, function (token) {
+        if(token)
+        document.getElementById("auth_status").innerHTML = "Staus: Logged in";
+        // console.log(token);
     });
-    document.getElementById("IMAGES_LINK").className += " active";
 }
 
 function changeTab2() {
-    console.log("***** in popup.js changeTab2");
-    changeTab(this, "ADD_IMAGE");
-    document.getElementById("ADD_IMAGE_LINK").className += " active";
+    changeTab(this, "UPLOAD");
+    document.getElementById("UPLOAD_LINK").className += " active";
 }
 
 function changeTab3() {
-    console.log("***** in popup.js changeTab3");
-    changeTab(this, "SETTINGS");
-    document.getElementById("SETTINGS_LINK").className += " active";
-    chrome.storage.sync.get(['tp_images'], function (items) {
-        document.getElementById("downloadable_images").innerHTML = "";
-        console.log('Settings retrieved', items.tp_images);
-        for (var i = 0; i < items.tp_images.length; i += 1) {
-            var x = document.createElement("option");
-            x.innerHTML = "image" + (i + 1);
-            x.value = items.tp_images[i];
-            document.getElementById("downloadable_images").appendChild(x);
-        }
-        var img = new Image();
-        img.onload = function () {
-            div = document.getElementById("canvas_dl");
-            div.width = img.width;
-            div.height = img.height;
-            div.getContext("2d").drawImage(img, 0, 0, div.width, div.height);
-            console.log(img.width);
-            console.log(img.height);
-        };
-        console.log(items.tp_images[0]);
-        img.src = items.tp_images[0];
-    });
+    changeTab(this, "DOWNLOAD");
+    document.getElementById("DOWNLOAD_LINK").className += " active";
 }
 
 var div, div2;
 
 document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('browse').addEventListener('change', browse, false);
-    document.getElementById('downloadable_images').addEventListener('change', change_downloadable_images, false);
+    // document.getElementById('downloadable_images').addEventListener('change', change_downloadable_images, false);
     document.getElementById('encrypt').addEventListener('click', encrypt, false);
     document.getElementById('decrypt').addEventListener('click', decrypt, false);
     document.getElementById('upload').addEventListener('click', upload, false);
     document.getElementById('downloadLink').addEventListener('click', download, false);
-    document.getElementById('remove_images').addEventListener('click', remove_images, false);
-    document.getElementById('IMAGES_LINK').addEventListener('click', changeTab1, false);
-    document.getElementById('ADD_IMAGE_LINK').addEventListener('click', changeTab2, false);
-    document.getElementById('SETTINGS_LINK').addEventListener('click', changeTab3, false);
+    document.getElementById('AUTH_LINK').addEventListener('click', changeTab1, false);
+    document.getElementById('UPLOAD_LINK').addEventListener('click', changeTab2, false);
+    document.getElementById('DOWNLOAD_LINK').addEventListener('click', changeTab3, false);
 });
 
-
 var download = function () {
-    console.log("***** in popup.js download");
     var downloadLink = document.getElementById("downloadLink");
     var x = document.getElementById("canvas_dl");
     var dt = x.toDataURL('image/png');
@@ -105,7 +63,6 @@ var download = function () {
 };
 
 function encrypt() {
-    console.log("***** in popup.js encrypt");
     var d = document.getElementById("status");
     d.innerHTML = "running ...";
     var e = document.getElementById('block-size');
@@ -117,7 +74,7 @@ function encrypt() {
     var e = document.getElementById('iter');
     var iter = e.value;
     if (!iter)
-        iter = 1;
+        iter = 100;
     else
         iter = parseInt(iter);
     setTimeout(function () {
@@ -128,8 +85,19 @@ function encrypt() {
     }, 100);
 }
 
+function draw(){
+    var img = new Image();
+    img.onload = function () {
+        div = document.getElementById("canvas_dl");
+        div.width = img.width;
+        div.height = img.height;
+        div.getContext("2d").drawImage(img, 0, 0, div.width, div.height);
+    };
+    img.src = document.getElementById("img_url").value;
+}
+
 function decrypt() {
-    console.log("***** in popup.js decrypt");
+    draw()
     var d = document.getElementById("status2");
     d.innerHTML = "running ...";
     var e = document.getElementById('block-size2');
@@ -152,97 +120,38 @@ function decrypt() {
     }, 100);
 };
 
+// function get_binary_data_from_canvas(){
+//     var canvas = document.getElementById("canvas");
+//     return canvas.toDataURL();
+// }
+
 function upload() {
-    console.log("***** in popup.js upload");
     var d = document.getElementById("status");
     d.innerHTML = "uploading...";
-    var dataURL = div.toDataURL('image/png');
-    var image64 = dataURL.replace(/data:image\/png;base64,/, '');
-    var dataURLThumb = div2.toDataURL('image/png');
-    var image64Thumb = dataURLThumb.replace(/data:image\/png;base64,/, '');
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', 'https://api.imgur.com/3/image', true);
-    xhr.setRequestHeader('Cache-Control', 'no-cache');
-    xhr.setRequestHeader('Authorization', 'Client-ID 90e04f70c29da38');
-    xhr.onreadystatechange = function () {
-        if (this.readyState == 4) {
-            var response = JSON.parse(xhr.response);
-            if (response.error) {
-                console.log('Error: ' + response.error.message);
-                return;
-            }
-            var xhr2 = new XMLHttpRequest();
-            xhr2.open('POST', 'https://api.imgur.com/3/image', true);
-            xhr2.setRequestHeader('Cache-Control', 'no-cache');
-            xhr2.setRequestHeader('Authorization', 'Client-ID 90e04f70c29da38');
-
-            xhr2.send(image64Thumb);
-            xhr2.onreadystatechange = function () {
-                if (this.readyState == 4) {
-                    var response2 = JSON.parse(xhr2.response);
-                    if (response.error) {
-                        console.log('Error: ' + response.error.message);
-                        return;
-                    }
-                    chrome.storage.sync.get(['tp_images'], function (items) {
-                        var imgs = items.tp_images || [];
-                        imgs.push(response.data.link);
-                        chrome.storage.sync.set({
-                            'tp_images': imgs
-                        }, function () {
-                            console.log('Settings saved');
-                        });
-                    });
-                    chrome.storage.sync.get(['tp_images_thumb'], function (items) {
-                        var imgs = items.tp_images_thumb || [];
-                        imgs.push(response2.data.link);
-                        chrome.storage.sync.set({
-                            'tp_images_thumb': imgs
-                        }, function () {
-                            console.log('Settings saved 2');
-                        });
-                    });
-                    d.innerHTML = "done <a href='" + response.data.link + "' target='_blank'>link</a>" +
-                        "&nbsp; - &nbsp; <a href='" + response2.data.link + "' target='_blank'>link_thumb</a>";
-                    console.log(response.data.link);
-                }
-            }
+    var photo_upload = function (token) {
+        var time = new Date();
+        var up_req = new XMLHttpRequest();
+        up_req.open('POST', 'https://photoslibrary.googleapis.com/v1/uploads', true);
+        up_req.setRequestHeader('Content-type', 'application/octet-stream');
+        up_req.setRequestHeader('Authorization', 'Bearer ' + token);
+        up_req.setRequestHeader('X-Goog-Upload-File-Name', time.toJSON());
+        up_req.onreadystatechange = function () {
+            debugger; // TODO
         }
-    };
-    xhr.send(image64); // From #2 where we edit the screenshot.
+        var binary_data = get_binary_data_from_canvas();
+    }
+
+    chrome.identity.getAuthToken({'interactive': true}, photo_upload);
 }
 
-// run time ->
-// tabs     ->
-
 function browse() {
-    console.log("***** in popup.js browse");
     if (this.files && this.files[0]) {
         var FR = new FileReader();
         FR.onload = function (e) {
-
-            // ...query for the active tab...
             chrome.tabs.query({
                 active: true,
                 currentWindow: true
             }, function (tabs) {
-                // ...and send a request for the DOM info...
-
-                console.log("to content");
-
-                //chrome.tabs.sendMessage(
-                //    tabs[0].id,
-                //    {from: 'popup', subject: e.target.result, text: "gav"},
-                //     ...also specifying a callback to be called
-                //        from the receiving end (content script)
-                //function (response) {
-                //    console.log("from content" );
-                //    console.log(response.majid);
-                //    console.log(response.created_canvas);
-                //    document.body.appendChild(response.created_canvas);
-                //});
-
-
                 var img = new Image();
                 img.onload = function () {
                     div = document.getElementById("canvas");
@@ -282,21 +191,7 @@ var change_downloadable_images = function () {
     img.src = strUser;
 };
 
-var remove_images = function () {
-    console.log("***** in popup.js remove_images");
-    chrome.storage.sync.set({
-        'tp_images': []
-    }, function () {
-        chrome.storage.sync.set({
-            'tp_images_thumb': []
-        }, function () {
-            console.log('Settings saved');
-            changeTab1();
-        });
-    });
-};
-
-// start of aes code
+// TPE Stuff
 
 var TPEncryption = function TPEncryption(canvasId, key) {
     console.log("***** in popup.js TPEncryption");

@@ -11,3 +11,5 @@ node_modules
 matlab-code
 
 *.pem
+*.jpg
+images

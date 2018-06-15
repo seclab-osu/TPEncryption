@@ -1,5 +1,6 @@
 {
   "manifest_version": 2,
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgHuCDOwoJ1IwmQpfDfy0ydQOcgOW8pqQ4HtLi/II6f+WQ1SZ9YkRjLn5gcXd7gDb2Ya37Oudk+t/gPmU60pe3vw2yL8xt5U0l6yIn+PjIHcHUrlPIJxKc4BkAjQtlw8ifdI6Y7ZvSEbMkw9k6cpFIBD0WMsuOPBX7Z1osU3EeWQWBBN1SpNfUY8n6KfYMHWc54338vDfPp1wp9cDzmx3lEphLhG5L7rDndaauFzhv37ExnzpQQytV1HsiwK+wsRQFtS9Hxr1tAdW96HKVVRpCikHpN+cWaOMz/o1fm8fva/N3KYDOMx66IML1Aja2FI1wbZfJAqyzJwEzWdeINY/xwIDAQAB",
   "background": {
     "scripts": ["background.js"]
   },
@@ -17,13 +18,20 @@
   },
 
   "content_scripts": [{
-    "matches": ["http://*/*", "https://*/*"],
+    "matches": ["https://photos.google.com/*"],
     "js": ["content_script.js"],
-    "run_at": "document_end"
+    "run_at": "document_idle"
   }],
 
   "minimum_chrome_version": "6",
   "name": "Image Encryption Tool",
-  "permissions": ["contextMenus", "tabs", "http://*/*", "https://*/*", "activeTab", "storage"],
+  "permissions": ["contextMenus", "tabs", "http://*/*", "https://*/*", "activeTab", "storage", "identity"],
+  "oauth2": {
+    "client_id": "117852674018-o1ge0q1851ehgt8o9mudnas5oprc90qr.apps.googleusercontent.com",
+    "scopes": [
+      "https://www.googleapis.com/auth/photoslibrary.appendonly",
+      "https://www.googleapis.com/auth/photoslibrary.readonly.appcreateddata"
+    ]
+  },
   "version": "1.0"
 }
