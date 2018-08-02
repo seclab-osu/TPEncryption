@@ -1,9 +1,3 @@
-// chrome.identity.getAuthToken({ 'interactive': true }, function (token) {
-// });
-
-// chrome.storage.sync.get(["iterations", "blocksize"], function (items) {
-// });
-
 function changeTab(evt, cityName) {
     // Declare all variables
     var i, tabcontent, tablinks;
@@ -51,162 +45,26 @@ function changeTab3() {
     document.getElementById("DOWNLOAD_LINK").className += " active";
 }
 
-var div, div2;
 
 document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('browse').addEventListener('change', browse, false);
-    // document.getElementById('downloadable_images').addEventListener('change', change_downloadable_images, false);
-    document.getElementById('en_up').addEventListener('click', encrypt, false);
-    document.getElementById('de_dl').addEventListener('click', decrypt, false);
+    // authentication
     document.getElementById('AUTH_LINK').addEventListener('click', changeTab1, false);
+    // upload
     document.getElementById('UPLOAD_LINK').addEventListener('click', changeTab2, false);
+    // uplaod file browser
+    document.getElementById('browse').addEventListener('change', browse, false);
+    // encrypt and upload
+    document.getElementById('en_up').addEventListener('click', encrypt, false);
+    // download
     document.getElementById('DOWNLOAD_LINK').addEventListener('click', changeTab3, false);
+    // decrypt and download
+    document.getElementById('de_dl').addEventListener('click', decrypt, false);
 });
 
-// encrypt and upload stuff
+var div, div2;
 
-function encrypt() {
-    setUploadStatus("Encrypting");
-    chrome.storage.sync.get(["iterations", "blocksize"], function (config) {
-        setTimeout(function () {
-            console.log(config);
-            var x = new TPEncryption(div, "Example128BitKey");
-            x.encrypt(config.iterations, config.blocksize, function (time) {
-                setUploadStat(time + "ms");
-                upload();
-            });
-        }, 100);
-    });
-}
 
-var sendMediaItemRequest = function (token, uploadToken) {
-    var req = new XMLHttpRequest();
-    req.open('POST', 'https://photoslibrary.googleapis.com/v1/mediaItems:batchCreate', true);
-    req.setRequestHeader('Content-type', 'application/json');
-    req.setRequestHeader('Authorization', 'Bearer ' + token);
-    var payload = {
-        "newMediaItems": [{
-            "description": "tpeimage",
-            "simpleMediaItem": {
-                "uploadToken": uploadToken
-            }
-        }]
-    }
-    payload = JSON.stringify(payload);
-    req.onreadystatechange = function () {
-        var that = this;
-        if (that.readyState === 4 && that.status === 200) {
-            // ref https://developers.google.com/photos/library/guides/upload-media#item-creation-response
-            console.log("SUCCESS sendMediaItemRequest");
-            setUploadStatus("Upload Success");
-            var response = JSON.parse(that.response);
-            var url = response.newMediaItemResults[0].mediaItem.productUrl;
-            console.log("Uploaded at: "+ url);
-            setUploadStatus('<a href="'+url+'">Google Photos</a>');
-        } else {
-            console.log("ERROR in sendMediaItemRequest");
-            setUploadStatus("Upload Failed at sendMediaItemRequest");
-        }
-    };
-    req.send(payload);
-};
-
-var sendImageBinary = function (token, binaryData) {
-    var time = new Date();
-    var req = new XMLHttpRequest();
-    req.open('POST', 'https://photoslibrary.googleapis.com/v1/uploads', true);
-    req.setRequestHeader('Content-type', 'application/octet-stream');
-    req.setRequestHeader('Authorization', 'Bearer ' + token);
-    req.setRequestHeader('X-Goog-Upload-File-Name', time.toJSON());
-    req.onreadystatechange = function () {
-        var that = this;
-        if (that.readyState === 4 && that.status === 200) {
-            // ref https://developers.google.com/photos/library/guides/upload-media#uploading-bytes
-            console.log("SUCCESS sendImageBinary");
-            console.log(that.responseText);
-            var uploadToken = this.response;
-            setUploadStatus("Uploaded Image Binary");
-            sendMediaItemRequest(token, uploadToken);
-        } else {
-            console.log("ERROR in sendImageBinary");
-            setUploadStatus("Upload Failed at sendImageBinary");
-        }
-    };
-    req.send(binaryData);
-};
-
-var setUploadStatus = function (status) {
-    var s = document.getElementById("upload_status");
-    s.innerHTML = "Upload Status: " + status;
-}
-
-var setUploadStat = function (stat) {
-    var s = document.getElementById("upload_stat");
-    s.innerHTML = stat;
-}
-
-var upload = function () {
-    chrome.identity.getAuthToken({
-        'interactive': true
-    }, function (token) {
-        var c = document.getElementById("canvas");
-        setUploadStatus("uploading...");
-        c.toBlob(function(blob){
-            sendImageBinary(token, blob)
-        });
-    });
-}
-
-// decrypt and download stuff
-var setDownloadStatus = function (status) {
-    var s = document.getElementById("download_status");
-    s.innerHTML = "Download Status: " + status;
-}
-
-var setDownloadStat = function (stat) {
-    var s = document.getElementById("download_stat");
-    s.innerHTML = stat;
-}
-
-var download = function () {
-    var downloadLink = document.getElementById("dl_link");
-    var x = document.getElementById("canvas_dl");
-    var dt = x.toDataURL('image/png');
-    downloadLink.href = dt;
-    downloadLink.download = "download";
-    setDownloadStatus("Downloading...")
-    console.log("Downloding...");
-    downloadLink.click();
-    setDownloadStatus("Done!");
-};
-
-var draw = function () {
-    var img = new Image();
-    img.onload = function () {
-        div = document.getElementById("canvas_dl");
-        div.width = img.width;
-        div.height = img.height;
-        div.getContext("2d").drawImage(img, 0, 0, div.width, div.height);
-    };
-    img.src = document.getElementById("img_url").value;
-}
-
-function decrypt() {
-    draw()
-    setDownloadStatus("decrypting...")
-    chrome.storage.sync.get(["iterations", "blocksize"], function (config) {
-        setTimeout(function () {
-            console.log(config);
-            var x = new TPEncryption(div, "Example128BitKey");
-            x.decrypt(config.iterations, config.blocksize, function (time) {
-                setDownloadStat(time + "ms");
-                download();
-            });
-        }, 100);
-    });
-};
-
-function browse() {
+var browse = function () {
     if (this.files && this.files[0]) {
         var FR = new FileReader();
         FR.onload = function (e) {
@@ -235,28 +93,162 @@ function browse() {
     }
 }
 
-var change_downloadable_images = function () {
-    console.log("***** in popup.js change_downloadable_images");
-    var d = document.getElementById("downloadable_images");
-    var strUser = d.options[d.selectedIndex].value;
-    console.log(strUser);
 
+var encrypt = function () {
+    setUploadStatus("Encrypting");
+    chrome.storage.sync.get(["iterations", "blocksize"], function (config) {
+        setTimeout(function () {
+            console.log(config);
+            var x = new TPEncryption(div, "Example128BitKey");
+            x.encrypt(config.iterations, config.blocksize, function (time) {
+                setUploadStat(time + "ms");
+                upload();
+            });
+        }, 100);
+    });
+}
+
+
+var setUploadStatus = function (status) {
+    var s = document.getElementById("upload_status");
+    var msg = "Upload Status: " + status
+    s.innerHTML = msg;
+    console.log(msg)
+}
+
+
+var setUploadStat = function (stat) {
+    var s = document.getElementById("upload_stat");
+    s.innerHTML = stat;
+    console.log("upload stat:" + stat)
+}
+
+
+var upload = function () {
+    chrome.identity.getAuthToken({
+        'interactive': true
+    }, function (token) {
+        var c = document.getElementById("canvas");
+        setUploadStatus("uploading...");
+        c.toBlob(function (blob) {
+            sendImageBinary(token, blob)
+        });
+    });
+}
+
+
+var sendImageBinary = function (token, binaryData) {
+    var time = new Date();
+    var req = new XMLHttpRequest();
+    req.open('POST', 'https://photoslibrary.googleapis.com/v1/uploads', true);
+    req.setRequestHeader('Content-type', 'application/octet-stream');
+    req.setRequestHeader('Authorization', 'Bearer ' + token);
+    req.setRequestHeader('X-Goog-Upload-File-Name', time.toJSON());
+    req.onreadystatechange = function () {
+        var that = this;
+        if (that.readyState === 4 && that.status === 200) {
+            // ref https://developers.google.com/photos/library/guides/upload-media#uploading-bytes
+            console.log("SUCCESS sendImageBinary");
+            console.log(that.responseText);
+            var uploadToken = this.response;
+            setUploadStatus("Uploaded Image Binary");
+            sendMediaItemRequest(token, uploadToken);
+        } else {
+            console.log("ERROR in sendImageBinary");
+            setUploadStatus("Upload Failed at sendImageBinary");
+        }
+    };
+    req.send(binaryData);
+};
+
+
+var sendMediaItemRequest = function (token, uploadToken) {
+    var req = new XMLHttpRequest();
+    req.open('POST', 'https://photoslibrary.googleapis.com/v1/mediaItems:batchCreate', true);
+    req.setRequestHeader('Content-type', 'application/json');
+    req.setRequestHeader('Authorization', 'Bearer ' + token);
+    var payload = {
+        "newMediaItems": [{
+            "description": "tpeimage",
+            "simpleMediaItem": {
+                "uploadToken": uploadToken
+            }
+        }]
+    }
+    payload = JSON.stringify(payload);
+    req.onreadystatechange = function () {
+        var that = this;
+        if (that.readyState === 4 && that.status === 200) {
+            // ref https://developers.google.com/photos/library/guides/upload-media#item-creation-response
+            setUploadStatus("Upload Success");
+            var response = JSON.parse(that.response);
+            var url = response.newMediaItemResults[0].mediaItem.productUrl;
+            setUploadStatus('<a href="'+url+'">Google Photos</a>');
+        } else {
+            setUploadStatus("Upload Failed at sendMediaItemRequest");
+        }
+    };
+    req.send(payload);
+};
+
+
+var decrypt = function () {
+    draw()
+    setDownloadStatus("decrypting...")
+    chrome.storage.sync.get(["iterations", "blocksize"], function (config) {
+        setTimeout(function () {
+            console.log(config);
+            var x = new TPEncryption(div, "Example128BitKey");
+            x.decrypt(config.iterations, config.blocksize, function (time) {
+                setDownloadStat(time + "ms");
+                download();
+            });
+        }, 100);
+    });
+};
+
+
+var draw = function () {
     var img = new Image();
     img.onload = function () {
         div = document.getElementById("canvas_dl");
         div.width = img.width;
         div.height = img.height;
         div.getContext("2d").drawImage(img, 0, 0, div.width, div.height);
-        console.log(img.width);
-        console.log(img.height);
     };
-    img.src = strUser;
+    img.src = document.getElementById("img_url").value;
+}
+
+
+var setDownloadStatus = function (status) {
+    var s = document.getElementById("download_status");
+    var msg = "Download Status: " + status;
+    s.innerHTML = msg;
+    console.log(msg);
+}
+
+
+var setDownloadStat = function (stat) {
+    var s = document.getElementById("download_stat");
+    s.innerHTML = stat;
+    console.log("download stat:" + stat);
+}
+
+
+var download = function () {
+    var downloadLink = document.getElementById("dl_link");
+    var x = document.getElementById("canvas_dl");
+    var dt = x.toDataURL('image/png');
+    downloadLink.href = dt;
+    downloadLink.download = "download";
+    setDownloadStatus("Downloading...")
+    downloadLink.click();
+    setDownloadStatus("Done!");
 };
 
-// TPE Stuff
 
-var TPEncryption = function TPEncryption(canvasId, key) {
-    console.log("***** in popup.js TPEncryption");
+var TPEncryption = function (canvasId, key) {
+    console.log("TPE init");
     var that = this;
     that.mat_r = [];
     that.mat_g = [];
@@ -273,11 +265,12 @@ var TPEncryption = function TPEncryption(canvasId, key) {
 
     var ctx = c.getContext("2d");
     that.canvasImgData = ctx.getImageData(0, 0, that.w, that.h);
+    console.log("TPE init FIN");
 };
 
 
 TPEncryption.prototype.thumb = function () {
-    console.log("***** in popup.js TPEncryption thumb");
+    console.log("TPE thumb");
     var that = this;
     var block_size = that.block_size;
     var c = that.c;
@@ -310,11 +303,12 @@ TPEncryption.prototype.thumb = function () {
     }
     var ctx2 = document.getElementById("canvas_thumb").getContext("2d");
     ctx2.putImageData(imageData, 0, 0);
+    console.log("TPE thumb FIN");
 };
 
 
 TPEncryption.prototype.encrypt = function (num_of_iter, block_size, callback) {
-    console.log("***** in popup.js TPEncryption encrypt");
+    console.log("TPE encrypt");
     var that = this;
     that.block_size = block_size;
 
@@ -410,6 +404,7 @@ TPEncryption.prototype.encrypt = function (num_of_iter, block_size, callback) {
             ctx.putImageData(imageData, 0, 0);
             console.log("aes " + (timeOfEndOfAes - timeOfStart));
             console.log("after aes" + (timeOfEnd - timeOfEndOfAes));
+            console.log("TPE encrypt FIN");
             callback(timeOfEnd - timeOfStart);
         });
     });
@@ -419,7 +414,7 @@ TPEncryption.prototype.encrypt = function (num_of_iter, block_size, callback) {
 
 
 TPEncryption.prototype.decrypt = function (num_of_iter, block_size, callback) {
-    console.log("***** in popup.js TPEncryption decrypt");
+    console.log("TPE decrypt");
     var that = this;
     that.block_size = block_size;
 
@@ -522,6 +517,7 @@ TPEncryption.prototype.decrypt = function (num_of_iter, block_size, callback) {
             var end = new Date().getTime();
             //console.log("done in " + (end - start) + " ms. number of rnd generated = " + (sAesRndNumGen.ctr + pAesRndNumGen.ctr));
             ctx.putImageData(imageData, 0, 0);
+            console.log("TPE decrypt FIN");
             callback(end - start);
         });
     });
@@ -529,8 +525,8 @@ TPEncryption.prototype.decrypt = function (num_of_iter, block_size, callback) {
 };
 
 
-var AesRndNumGen = function AesRndNumGen(key, totalNeed, callback) {
-    console.log("***** in popup.js AesRndNumGen");
+var AesRndNumGen = function (key, totalNeed, callback) {
+    console.log("AES init");
     var that = this;
     that.ctr = 0;
     that.data = [];
@@ -648,15 +644,15 @@ var AesRndNumGen = function AesRndNumGen(key, totalNeed, callback) {
     });
 };
 
-AesRndNumGen.prototype.next = function next() {
-    // console.log("***** in popup.js AesRndNumGen next");
+AesRndNumGen.prototype.next = function () {
+    // console.log("AES next");
     var that = this;
     that.ctr += 1;
     return that.data[that.ctr - 1];
 };
 
-AesRndNumGen.prototype.getNewCouple = function getNewCouple(p, q, enc) {
-    // console.log("***** in popup.js AesRndNumGen getNewCouple");
+AesRndNumGen.prototype.getNewCouple = function (p, q, enc) {
+    // console.log("AES getNewCouple");
     var that = this;
     var rnd = that.next();
     var sum = p + q;
@@ -683,8 +679,8 @@ AesRndNumGen.prototype.getNewCouple = function getNewCouple(p, q, enc) {
     }
 };
 
-AesRndNumGen.prototype.getNewPermutation = function getNewPermutation(block_size) {
-    // console.log("***** in popup.js AesRndNumGen getNewPermutation");
+AesRndNumGen.prototype.getNewPermutation = function (block_size) {
+    // console.log("AES getNewPermutation");
     var that = this;
     var permutation = [];
     for (var z = 0; z < block_size * block_size; z += 1) {
