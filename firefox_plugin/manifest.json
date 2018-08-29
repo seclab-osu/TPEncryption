@@ -1,0 +1,40 @@
+{
+   "manifest_version": 2,
+   "name": "Image Encryption Tool",
+   "version": "0.1",
+
+   "description": "Thumbnail Preserving Image Encryption Tool",
+
+   "icons": {
+    "128": "icon.png"
+   },
+
+   "applications": {
+      "gecko": {
+         "id": "tpencryption@oregonstate.edu"
+      }
+   },
+
+   "background": {
+    "scripts": ["background.js"]
+   },
+
+   "browser_action": {
+    "default_icon": {
+      "16": "icon.png"
+    },
+    "default_title": "TPEncryption",
+    "default_popup": "popup.html"
+   },
+
+   "content_scripts": [{
+    "matches": ["https://photos.google.com/*"],
+    "js": ["content_script.js"],
+    "run_at": "document_idle"
+   }],
+
+  "options_ui": {
+  "page": "options.html"
+   },
+   "permissions": ["contextMenus", "tabs", "http://*/*", "https://*/*", "activeTab", "storage", "identity"]
+}

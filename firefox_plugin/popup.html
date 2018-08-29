@@ -1,0 +1,125 @@
+<!doctype html>
+<html>
+
+<head>
+    <title>TPEncryption Plugin</title>
+    <meta charset="utf-8">
+    <style type="text/css">
+        body {
+            margin: 0;
+            padding: 0;
+            /*border: 1px solid #ccc;*/
+        }
+
+        ul.tab {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            border: 1px solid #ccc;
+            background-color: #f1f1f1;
+        }
+
+        /* Float the list items side by side */
+
+        ul.tab li {
+            float: left;
+        }
+
+        /* Style the links inside the list items */
+
+        ul.tab li a {
+            display: inline-block;
+            color: black;
+            text-align: center;
+            padding: 8px 16px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+            font-size: 10px;
+        }
+
+        /* Change background color of links on hover */
+
+        ul.tab li a:hover {
+            background-color: #ddd;
+        }
+
+        /* Create an active/current tablink class */
+
+        ul.tab li a:focus,
+        .active {
+            background-color: #ccc;
+        }
+
+        /* Style the tab content */
+
+        .tabcontent {
+            display: none;
+            padding: 6px 12px;
+            border: 1px solid #ccc;
+            border-top: none;
+            height: 400px;
+            max-height: 400px;
+            overflow: scroll;
+        }
+    </style>
+</head>
+
+<body style="width: 480px;height: 400px;">
+
+
+    <ul class="tab">
+        <li>
+            <a class="tablinks" id="AUTH_LINK">AUTHENTICATE</a>
+        </li>
+        <li>
+            <a class="tablinks" id="UPLOAD_LINK">UPLOAD</a>
+        </li>
+        <li>
+            <a class="tablinks" id="DOWNLOAD_LINK">DOWNLOAD</a>
+        </li>
+    </ul>
+
+    <div id="AUTH" class="tabcontent">
+        <h3>Google Account Login</h3>
+        <div id="auth_status"></div>
+    </div>
+
+    <div id="UPLOAD" class="tabcontent">
+        <h3>Encrypt & Upload</h3>
+        <p>Encrypt an image and upload it to Google Photos.</p>
+        <input type="file" id="browse" value="Browse an image" accept="image/*" style="border: 0px solid;outline: none;width: 35%;margin-bottom: 10px;"
+        />
+        <span style="display: inline-block;margin-left: 10px;color:green;" id="upload_status"></span>
+        <span style="display: inline-block;margin-left: 10px;color:green;" id="upload_stat"></span>
+        <br style="margin-bottom: 50px;" />
+        <input type="button" id="en_up" value="Encrypt & Upload" style="width: 40%;border-radius: 0px;" />
+        <br/>
+        <br/>
+        <br/>
+        <canvas id="canvas" width="200" height="200" style="border: 1px solid gray; margin: 0 0 0 10px;width: 40%"></canvas>
+        <canvas id="canvas_thumb" width="200" height="200" style="border: 1px solid gray; margin: 0 0 0 10px;width: 40%;vertical-align: top;"></canvas>
+    </div>
+
+    <div id="DOWNLOAD" class="tabcontent">
+        <h3>Decrypt & Download</h3>
+        <p>Decrypt and download your image.</p>
+        <!-- <select id="downloadable_images" style="width: 30%;"></select> -->
+        <input type="text" id="img_url" placeholder="image url" style="width: 60%;border-radius: 0px;" />
+        <span style="display: inline-block;margin-left: 10px;color:green;" id="download_status"></span>
+        <span style="display: inline-block;margin-left: 10px;color:green;" id="download_stat"></span>
+        <br/>
+        <br/>
+        <a href="#" type="button" id="de_dl" value="Decrypt & Download" style="width: 40%;border-radius: 0px;margin-left:10px;">Decrypt & Download</a>
+        <a href="#" type="button" id="dl_link" value="" style="width: 40%;border-radius: 0px;margin-left:10px;"></a>
+        <br/>
+        <br/>
+        <br/>
+        <canvas id="canvas_dl" width="200" height="200" style="border: 1px solid gray; margin: 0 0 0 110px;width: 50%"></canvas>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+
+</html>
