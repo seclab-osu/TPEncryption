@@ -1,0 +1,6 @@
+baseURL = "https://akshithg.github.io/tpencryption/"
+languageCode = "en-us"
+title = "Thumbnail Preserving Encryption"
+
+theme = "introduction"
+publishDir = "../docs"
