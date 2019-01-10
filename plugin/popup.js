@@ -258,13 +258,14 @@ var TPEncryption = function (canvasId, key) {
     that.key = undefined;
 
     var c = canvasId;
+
     that.c = c;
-    that.w = c.width;
-    that.h = c.height;
+    // that.w = c.width;
+    // that.h = c.height;
     that.block_size = 0;
 
     var ctx = c.getContext("2d");
-    that.canvasImgData = ctx.getImageData(0, 0, that.w, that.h);
+    that.canvasImgData = ctx.getImageData(0, 0, c.width, c.height);
     console.log("TPE init FIN");
 };
 
@@ -313,6 +314,8 @@ TPEncryption.prototype.encrypt = function (num_of_iter, block_size, callback) {
     that.block_size = block_size;
 
     var c = that.c;
+    that.w = c.width;
+    that.h = c.height;
     var ctx = c.getContext("2d");
 
     var m = parseInt(Math.floor(that.w / block_size)),
