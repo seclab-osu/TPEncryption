@@ -278,8 +278,8 @@ TPEncryption.prototype.thumb = function () {
     var ctx = c.getContext("2d");
     var imageData = that.canvasImgData;
     var data = imageData.data;
-    var m = parseInt(Math.floor(that.w / block_size)),
-        n = parseInt(Math.floor(that.h / block_size));
+    var m = parseInt(Math.floor(c.width / block_size)),
+        n = parseInt(Math.floor(c.height / block_size));
     var r, g, b, p, g, p, q;
     for (var i = 0; i < n; i += 1) {
         for (var j = 0; j < m; j += 1) {
@@ -289,16 +289,16 @@ TPEncryption.prototype.thumb = function () {
             for (var k = 0; k < block_size * block_size; k += 1) {
                 p = parseInt(k / block_size);
                 q = k % block_size;
-                r += data[(i * that.w * block_size + p * that.w + j * block_size + q) * 4];
-                g += data[(i * that.w * block_size + p * that.w + j * block_size + q) * 4 + 1];
-                b += data[(i * that.w * block_size + p * that.w + j * block_size + q) * 4 + 2];
+                r += data[(i * c.width * block_size + p * c.width + j * block_size + q) * 4];
+                g += data[(i * c.width * block_size + p * c.width + j * block_size + q) * 4 + 1];
+                b += data[(i * c.width * block_size + p * c.width + j * block_size + q) * 4 + 2];
             }
             for (var k = 0; k < block_size * block_size; k += 1) {
                 p = parseInt(k / block_size);
                 q = k % block_size;
-                data[(i * that.w * block_size + p * that.w + j * block_size + q) * 4] = parseInt(r / (block_size * block_size));
-                data[(i * that.w * block_size + p * that.w + j * block_size + q) * 4 + 1] = parseInt(g / (block_size * block_size));
-                data[(i * that.w * block_size + p * that.w + j * block_size + q) * 4 + 2] = parseInt(b / (block_size * block_size));
+                data[(i * c.width * block_size + p * c.width + j * block_size + q) * 4] = parseInt(r / (block_size * block_size));
+                data[(i * c.width * block_size + p * c.width + j * block_size + q) * 4 + 1] = parseInt(g / (block_size * block_size));
+                data[(i * c.width * block_size + p * c.width + j * block_size + q) * 4 + 2] = parseInt(b / (block_size * block_size));
             }
         }
     }
@@ -314,17 +314,17 @@ TPEncryption.prototype.encrypt = function (num_of_iter, block_size, callback) {
     that.block_size = block_size;
 
     var c = that.c;
-    that.w = c.width;
-    that.h = c.height;
+    // that.w = c.width;
+    // that.h = c.height;
     var ctx = c.getContext("2d");
 
-    var m = parseInt(Math.floor(that.w / block_size)),
-        n = parseInt(Math.floor(that.h / block_size));
+    var m = parseInt(Math.floor(c.width / block_size)),
+        n = parseInt(Math.floor(c.height / block_size));
 
     var permutation = [];
     var r1, g1, b1, r2, g2, b2, rt1, gt1, bt1, rt2, gt2, bt2, p, q, x, y;
     // substitute pixels!
-    var imageData = ctx.getImageData(0, 0, that.w, that.h);
+    var imageData = ctx.getImageData(0, 0, c.width, c.height);
     var data = imageData.data;
 
     var totalRndForPermutation = num_of_iter * n * m * block_size * block_size;
@@ -345,13 +345,13 @@ TPEncryption.prototype.encrypt = function (num_of_iter, block_size, callback) {
                             x = parseInt((k + 1) / block_size);
                             y = (k + 1) % block_size;
 
-                            r1 = data[(i * that.w * block_size + p * that.w + j * block_size + q) * 4];
-                            g1 = data[(i * that.w * block_size + p * that.w + j * block_size + q) * 4 + 1];
-                            b1 = data[(i * that.w * block_size + p * that.w + j * block_size + q) * 4 + 2];
+                            r1 = data[(i * c.width * block_size + p * c.width + j * block_size + q) * 4];
+                            g1 = data[(i * c.width * block_size + p * c.width + j * block_size + q) * 4 + 1];
+                            b1 = data[(i * c.width * block_size + p * c.width + j * block_size + q) * 4 + 2];
 
-                            r2 = data[(i * that.w * block_size + x * that.w + j * block_size + y) * 4];
-                            g2 = data[(i * that.w * block_size + x * that.w + j * block_size + y) * 4 + 1];
-                            b2 = data[(i * that.w * block_size + x * that.w + j * block_size + y) * 4 + 2];
+                            r2 = data[(i * c.width * block_size + x * c.width + j * block_size + y) * 4];
+                            g2 = data[(i * c.width * block_size + x * c.width + j * block_size + y) * 4 + 1];
+                            b2 = data[(i * c.width * block_size + x * c.width + j * block_size + y) * 4 + 2];
 
                             rt1 = sAesRndNumGen.getNewCouple(r1, r2, true);
                             rt2 = r1 + r2 - rt1;
@@ -362,13 +362,13 @@ TPEncryption.prototype.encrypt = function (num_of_iter, block_size, callback) {
                             bt1 = sAesRndNumGen.getNewCouple(b1, b2, true);
                             bt2 = b1 + b2 - bt1;
 
-                            data[(i * that.w * block_size + p * that.w + j * block_size + q) * 4] = rt1;
-                            data[(i * that.w * block_size + p * that.w + j * block_size + q) * 4 + 1] = gt1;
-                            data[(i * that.w * block_size + p * that.w + j * block_size + q) * 4 + 2] = bt1;
+                            data[(i * c.width * block_size + p * c.width + j * block_size + q) * 4] = rt1;
+                            data[(i * c.width * block_size + p * c.width + j * block_size + q) * 4 + 1] = gt1;
+                            data[(i * c.width * block_size + p * c.width + j * block_size + q) * 4 + 2] = bt1;
 
-                            data[(i * that.w * block_size + x * that.w + j * block_size + y) * 4] = rt2;
-                            data[(i * that.w * block_size + x * that.w + j * block_size + y) * 4 + 1] = gt2;
-                            data[(i * that.w * block_size + x * that.w + j * block_size + y) * 4 + 2] = bt2;
+                            data[(i * c.width * block_size + x * c.width + j * block_size + y) * 4] = rt2;
+                            data[(i * c.width * block_size + x * c.width + j * block_size + y) * 4 + 1] = gt2;
+                            data[(i * c.width * block_size + x * c.width + j * block_size + y) * 4 + 2] = bt2;
                         }
                     }
                 }
@@ -382,9 +382,9 @@ TPEncryption.prototype.encrypt = function (num_of_iter, block_size, callback) {
                         for (var k = 0; k < block_size * block_size; k += 1) {
                             p = parseInt(k / block_size);
                             q = k % block_size;
-                            r = data[(i * that.w * block_size + p * that.w + j * block_size + q) * 4];
-                            g = data[(i * that.w * block_size + p * that.w + j * block_size + q) * 4 + 1];
-                            b = data[(i * that.w * block_size + p * that.w + j * block_size + q) * 4 + 2];
+                            r = data[(i * c.width * block_size + p * c.width + j * block_size + q) * 4];
+                            g = data[(i * c.width * block_size + p * c.width + j * block_size + q) * 4 + 1];
+                            b = data[(i * c.width * block_size + p * c.width + j * block_size + q) * 4 + 2];
                             r_list.push(r);
                             g_list.push(g);
                             b_list.push(b);
@@ -395,9 +395,9 @@ TPEncryption.prototype.encrypt = function (num_of_iter, block_size, callback) {
                         for (var k = 0; k < block_size * block_size; k += 1) {
                             p = parseInt(k / block_size);
                             q = k % block_size;
-                            data[(i * that.w * block_size + p * that.w + j * block_size + q) * 4] = r_list[permutation[k]];
-                            data[(i * that.w * block_size + p * that.w + j * block_size + q) * 4 + 1] = g_list[permutation[k]];
-                            data[(i * that.w * block_size + p * that.w + j * block_size + q) * 4 + 2] = b_list[permutation[k]];
+                            data[(i * c.width * block_size + p * c.width + j * block_size + q) * 4] = r_list[permutation[k]];
+                            data[(i * c.width * block_size + p * c.width + j * block_size + q) * 4 + 1] = g_list[permutation[k]];
+                            data[(i * c.width * block_size + p * c.width + j * block_size + q) * 4 + 2] = b_list[permutation[k]];
                         }
                     }
                 }
@@ -424,13 +424,13 @@ TPEncryption.prototype.decrypt = function (num_of_iter, block_size, callback) {
     var c = that.c;
     var ctx = c.getContext("2d");
 
-    var m = parseInt(Math.floor(that.w / block_size)),
-        n = parseInt(Math.floor(that.h / block_size));
+    var m = parseInt(Math.floor(c.width / block_size)),
+        n = parseInt(Math.floor(c.height / block_size));
 
     var permutation = [];
     var r1, g1, b1, r2, g2, b2, rt1, gt1, bt1, rt2, gt2, bt2, p, q, x, y;
     // substitute pixels!
-    var imageData = ctx.getImageData(0, 0, that.w, that.h);
+    var imageData = ctx.getImageData(0, 0, c.width, c.height);
     var data = imageData.data;
 
 
@@ -461,9 +461,9 @@ TPEncryption.prototype.decrypt = function (num_of_iter, block_size, callback) {
                         for (var k = 0; k < block_size * block_size; k += 1) {
                             p = parseInt(k / block_size);
                             q = k % block_size;
-                            r = data[(i * that.w * block_size + p * that.w + j * block_size + q) * 4];
-                            g = data[(i * that.w * block_size + p * that.w + j * block_size + q) * 4 + 1];
-                            b = data[(i * that.w * block_size + p * that.w + j * block_size + q) * 4 + 2];
+                            r = data[(i * c.width * block_size + p * c.width + j * block_size + q) * 4];
+                            g = data[(i * c.width * block_size + p * c.width + j * block_size + q) * 4 + 1];
+                            b = data[(i * c.width * block_size + p * c.width + j * block_size + q) * 4 + 2];
                             r_list.push(r);
                             g_list.push(g);
                             b_list.push(b);
@@ -474,9 +474,9 @@ TPEncryption.prototype.decrypt = function (num_of_iter, block_size, callback) {
                         for (var k = 0; k < block_size * block_size; k += 1) {
                             p = parseInt(permutation[k] / block_size);
                             q = permutation[k] % block_size;
-                            data[(i * that.w * block_size + p * that.w + j * block_size + q) * 4] = r_list[k];
-                            data[(i * that.w * block_size + p * that.w + j * block_size + q) * 4 + 1] = g_list[k];
-                            data[(i * that.w * block_size + p * that.w + j * block_size + q) * 4 + 2] = b_list[k];
+                            data[(i * c.width * block_size + p * c.width + j * block_size + q) * 4] = r_list[k];
+                            data[(i * c.width * block_size + p * c.width + j * block_size + q) * 4 + 1] = g_list[k];
+                            data[(i * c.width * block_size + p * c.width + j * block_size + q) * 4 + 2] = b_list[k];
                         }
                     }
                 }
@@ -489,13 +489,13 @@ TPEncryption.prototype.decrypt = function (num_of_iter, block_size, callback) {
                             x = parseInt((k + 1) / block_size);
                             y = (k + 1) % block_size;
 
-                            r1 = data[(i * that.w * block_size + p * that.w + j * block_size + q) * 4];
-                            g1 = data[(i * that.w * block_size + p * that.w + j * block_size + q) * 4 + 1];
-                            b1 = data[(i * that.w * block_size + p * that.w + j * block_size + q) * 4 + 2];
+                            r1 = data[(i * c.width * block_size + p * c.width + j * block_size + q) * 4];
+                            g1 = data[(i * c.width * block_size + p * c.width + j * block_size + q) * 4 + 1];
+                            b1 = data[(i * c.width * block_size + p * c.width + j * block_size + q) * 4 + 2];
 
-                            r2 = data[(i * that.w * block_size + x * that.w + j * block_size + y) * 4];
-                            g2 = data[(i * that.w * block_size + x * that.w + j * block_size + y) * 4 + 1];
-                            b2 = data[(i * that.w * block_size + x * that.w + j * block_size + y) * 4 + 2];
+                            r2 = data[(i * c.width * block_size + x * c.width + j * block_size + y) * 4];
+                            g2 = data[(i * c.width * block_size + x * c.width + j * block_size + y) * 4 + 1];
+                            b2 = data[(i * c.width * block_size + x * c.width + j * block_size + y) * 4 + 2];
 
                             rt1 = sAesRndNumGen.getNewCouple(r1, r2, false);
                             rt2 = r1 + r2 - rt1;
@@ -506,13 +506,13 @@ TPEncryption.prototype.decrypt = function (num_of_iter, block_size, callback) {
                             bt1 = sAesRndNumGen.getNewCouple(b1, b2, false);
                             bt2 = b1 + b2 - bt1;
 
-                            data[(i * that.w * block_size + p * that.w + j * block_size + q) * 4] = rt1;
-                            data[(i * that.w * block_size + p * that.w + j * block_size + q) * 4 + 1] = gt1;
-                            data[(i * that.w * block_size + p * that.w + j * block_size + q) * 4 + 2] = bt1;
+                            data[(i * c.width * block_size + p * c.width + j * block_size + q) * 4] = rt1;
+                            data[(i * c.width * block_size + p * c.width + j * block_size + q) * 4 + 1] = gt1;
+                            data[(i * c.width * block_size + p * c.width + j * block_size + q) * 4 + 2] = bt1;
 
-                            data[(i * that.w * block_size + x * that.w + j * block_size + y) * 4] = rt2;
-                            data[(i * that.w * block_size + x * that.w + j * block_size + y) * 4 + 1] = gt2;
-                            data[(i * that.w * block_size + x * that.w + j * block_size + y) * 4 + 2] = bt2;
+                            data[(i * c.width * block_size + x * c.width + j * block_size + y) * 4] = rt2;
+                            data[(i * c.width * block_size + x * c.width + j * block_size + y) * 4 + 1] = gt2;
+                            data[(i * c.width * block_size + x * c.width + j * block_size + y) * 4 + 2] = bt2;
                         }
                     }
                 }
