@@ -4,3 +4,7 @@ title = "Thumbnail Preserving Encryption"
 
 theme = "introduction"
 publishDir = "../docs"
+
+[params]
+    [params.home]
+        introHeight              = "medium"                 # Input either "medium" or "large" or "fullheight"
