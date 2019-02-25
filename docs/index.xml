@@ -2,20 +2,20 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Thumbnail Preserving Encryption</title>
-    <link>http://photoencryption.org/</link>
+    <link>https://photoencryption.org/</link>
     <description>Recent content on Thumbnail Preserving Encryption</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     
-	<atom:link href="http://photoencryption.org/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://photoencryption.org/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>Thumbnail-Preserving Encryption</title>
-      <link>http://photoencryption.org/home/</link>
+      <title>Thumbnail Preserving Encryption</title>
+      <link>https://photoencryption.org/home/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>http://photoencryption.org/home/</guid>
+      <guid>https://photoencryption.org/home/</guid>
       <description>Balancing Image Privacy and Usability</description>
     </item>
     

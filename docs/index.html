@@ -14,19 +14,19 @@ Thumbnail Preserving Encryption
 </title>
 
 
-  <link href="http://photoencryption.org/index.xml" rel="alternate" type="application/rss+xml" title="Thumbnail Preserving Encryption" />
+  <link href="https://photoencryption.org/index.xml" rel="alternate" type="application/rss+xml" title="Thumbnail Preserving Encryption" />
 
 
         <meta property="og:title" content="Thumbnail Preserving Encryption" />
 <meta property="og:type" content="website" />
 <meta property="og:description" content=""/>
-<meta property="og:url" content="http://photoencryption.org/"/>
+<meta property="og:url" content="https://photoencryption.org/"/>
 <meta property="og:site_name" content="Thumbnail Preserving Encryption"/>
 
 
 
 
-<meta property="og:image" content="http://photoencryption.org/home/privacy.png"/>
+<meta property="og:image" content="https://photoencryption.org/home/privacy.png"/>
 
 
 
@@ -39,7 +39,7 @@ Thumbnail Preserving Encryption
 
 
 
-<link rel="stylesheet" href="http://photoencryption.org/css/main.min.2e81ff58fe6794a3106136466be9aca81eab4cd09f210e799a38d526edabf455.css" integrity="sha256-LoH/WP5nlKMQYTZGa&#43;msqB6rTNCfIQ55mjjVJu2r9FU=" crossorigin="anonymous" media="screen">
+<link rel="stylesheet" href="https://photoencryption.org/css/main.min.b56729b48f8cf851b62086244a94c2d36e1bf264e5d438edad777e80d97d6d4d.css" integrity="sha256-tWcptI&#43;M&#43;FG2IIYkSpTC024b8mTl1DjtrXd&#43;gNl9bU0=" crossorigin="anonymous" media="screen">
 
 
 
@@ -48,19 +48,19 @@ Thumbnail Preserving Encryption
         
 
 
-<link rel="stylesheet" href="http://photoencryption.org/styles/owlCarousel.min.b1f26e29c43c61fe8b5a6f225b4ee7c5f969a7b33cfe512706271e07246d93d1.css" integrity="sha256-sfJuKcQ8Yf6LWm8iW07nxflpp7M8/lEnBiceByRtk9E=" crossorigin="anonymous" media="screen">
+<link rel="stylesheet" href="https://photoencryption.org/styles/owlCarousel.min.b1f26e29c43c61fe8b5a6f225b4ee7c5f969a7b33cfe512706271e07246d93d1.css" integrity="sha256-sfJuKcQ8Yf6LWm8iW07nxflpp7M8/lEnBiceByRtk9E=" crossorigin="anonymous" media="screen">
 
     </head>
     <body>
         <section id="top" class="section">
             
-            <div class="hero is-medium">
+            <div class="hero is-small">
                 
                 <div class="hero-body">
                     <div class="container has-text-centered">
                         
                         <h1 class="bold-title fade-in one">
-                            Thumbnail-Preserving Encryption
+                            Thumbnail Preserving Encryption
                         </h1>
                         <div class="subtitle is-3 fade-in two">
                             <p>Balancing Image Privacy and Usability</p>
@@ -110,6 +110,10 @@ Thumbnail Preserving Encryption
             
             
             <a class="navbar-item" href="#paper">Paper</a>
+            
+            
+            
+            <a class="navbar-item" href="#demo">Demo</a>
             
             
             
@@ -184,9 +188,98 @@ In this paper we motivate the need for image encryption techniques which preserv
                         <h2 class="title is-2 has-text-centered">Paper</h2>
                         
                         <div class="markdown has-text-centered">
-                            <p>Balancing Image Privacy and Usability with Thumbnail-Preserving Encryption, was published at <a href="https://www.ndss-symposium.org/wp-content/uploads/2019/02/ndss2019_07B-1_Tajik_paper.pdf">NDSS 2019</a>.</p>
+                            <p>Published at <a href="https://www.ndss-symposium.org/wp-content/uploads/2019/02/ndss2019_07B-1_Tajik_paper.pdf">NDSS 2019</a>.</p>
 
-<p>The full version of the paper is available <a href="home/tpe_ndss19.pdf">here</a></p>
+<p>You can access the full paper <a href="home/tpe_ndss19.pdf">here</a></p>
+
+                        </div>
+                        
+                    </div>
+                    
+                    <div class="container has-text-centered top-pad">
+    <a href="#top">
+        <i class="fa fa-arrow-up"></i>
+    </a>
+</div>
+
+                </div>
+                <div class="container"><hr></div>
+                
+                
+                
+                
+                <div class="section" id="demo">
+                    <div class="container">
+                        <h2 class="title is-2 has-text-centered">Demo</h2>
+                        
+                        <div class="markdown has-text-centered">
+                            
+<script src="tpe.js"></script>
+<link href="tpe.css" type="text/css" rel="stylesheet" />
+
+<section class="box-col">
+    <div><button id="try"> Try It </button></div>
+</section>
+
+<div id="ddemo" class="box-col">
+<section>
+    <!-- Select image -->
+    <div><input type="file" name="Browse" id="browse" accept="image/*" class="action-button"></div>
+    <span>
+    <div>Number of iterations:<input type="number" name="iterations" id="iterations" min="1" required> </div>
+    <div>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;Block Size:<input type="number" name="blocksize" id="blocksize" min="1" required> </div>
+    <div id="abc">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;Key:&#160;&#160;&#160;&#160;<input type="text" name="key" id="key" required> </div>
+    <div><button id="set" class="button">Set</button></div>
+    </span>
+    <!-- Original image -->
+    <div class="box-row">
+        <!-- image -->
+        <div class="canvas-container">
+            <div> Original Image </div>
+            <canvas class="canvas-image" id="canvas-og"></canvas>
+        </div>
+        <!-- thumbnail -->
+        <div class="canvas-container">
+            <div> Original Image Thumbnail </div>
+            <canvas class="canvas-image-thumbnail" id="canvas-ogt"></canvas>
+        </div>
+    </div>
+</section>
+<section>
+    <!-- Encrypt image -->
+    <div><button id="encrypt" class="button">Encrypt</button></div>
+
+    <div class="box-row">
+        <!-- image -->
+        <div class="canvas-container">
+            <div> Encrypted Image </div>
+            <canvas class="canvas-image" id="canvas-en"></canvas>
+        </div>
+        <!-- thumbnail -->
+        <div class="canvas-container">
+            <div> Encrypted Image Thumbnail </div>
+            <canvas class="canvas-image-thumbnail" id="canvas-ent"></canvas>
+        </div>
+    </div>
+</section>
+<section>
+    <!-- Decrypted image -->
+    <div><button id="decrypt" class="button">Decrypt</button></div>
+
+    <div class="box-row">
+        <!-- image -->
+        <div class="canvas-container">
+            <div> Decrypted Image</div>
+            <canvas class="canvas-image" id="canvas-de"></canvas>
+        </div>
+        <!-- thumbnail -->
+        <div class="canvas-container">
+            <div> Decrypted Image Thumbnail</div>
+            <canvas class="canvas-image-thumbnail" id="canvas-det"></canvas>
+        </div>
+    </div>
+</section>
+</div>
 
                         </div>
                         
@@ -232,7 +325,7 @@ In this paper we motivate the need for image encryption techniques which preserv
                         <h2 class="title is-2 has-text-centered">People</h2>
                         
                         <div class="markdown has-text-centered">
-                            <p><a href="https://www.linkedin.com/in/kimia-tajik-6680a05a/">Kimia Tajik</a>, <a href="https://akshithg.github.io/">Akshith Gunasekaran</a>, Rhea Dutta, <a href="https://b-mp-e.github.io/">Brandon Ellis</a>, Rakesh B. Bobba, <a href="http://web.engr.oregonstate.edu/~rosulekm/">Mike Rosulek</a>, <a href="https://web.cecs.pdx.edu/~cvwright/">Charles V. Wright</a> and Wu-chi Feng</p>
+                            <p><a href="https://kimiatajik.com/">Kimia Tajik</a>, <a href="https://akshithg.github.io/">Akshith Gunasekaran</a>, <a href="https://www.linkedin.com/in/rhea-dutta/">Rhea Dutta</a>, <a href="https://b-mp-e.github.io/">Brandon Ellis</a>, <a href="https://eecs.oregonstate.edu/people/bobba-rakesh">Rakesh B. Bobba</a>, <a href="http://web.engr.oregonstate.edu/~rosulekm/">Mike Rosulek</a>, <a href="https://web.cecs.pdx.edu/~cvwright/">Charles V. Wright</a> and <a href="http://web.cecs.pdx.edu/~wuchi/">Wu-chi Feng</a></p>
 
                         </div>
                         
@@ -275,14 +368,14 @@ In this paper we motivate the need for image encryption techniques which preserv
         
 
 
-<script src="http://photoencryption.org/js/bundle.baa2874a80b328e7dec720d3a90efc6efd25ccdf1611f37d9571354e88987590.js" integrity="sha256-uqKHSoCzKOfexyDTqQ78bv0lzN8WEfN9lXE1ToiYdZA="></script>
+<script src="https://photoencryption.org/js/bundle.baa2874a80b328e7dec720d3a90efc6efd25ccdf1611f37d9571354e88987590.js" integrity="sha256-uqKHSoCzKOfexyDTqQ78bv0lzN8WEfN9lXE1ToiYdZA="></script>
 
 
 
         
 
 
-<script src="http://photoencryption.org/js/bundleOwlCarousel.cba358484a4a50bbc9c265ab71727cbcd15381bbb8cecdbcba357cb629f4e9c4.js" integrity="sha256-y6NYSEpKULvJwmWrcXJ8vNFTgbu4zs28ujV8tin06cQ="></script>
+<script src="https://photoencryption.org/js/bundleOwlCarousel.cba358484a4a50bbc9c265ab71727cbcd15381bbb8cecdbcba357cb629f4e9c4.js" integrity="sha256-y6NYSEpKULvJwmWrcXJ8vNFTgbu4zs28ujV8tin06cQ="></script>
 
 
         

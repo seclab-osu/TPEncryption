@@ -1,4 +1,4 @@
-baseURL = "http://photoencryption.org/"
+baseURL = "https://photoencryption.org/"
 languageCode = "en-us"
 title = "Thumbnail Preserving Encryption"
 
@@ -7,4 +7,4 @@ publishDir = "../docs"
 
 [params]
     [params.home]
-        introHeight              = "medium"                 # Input either "medium" or "large" or "fullheight"
+        introHeight              = "small"                 # Input either "medium" or "large" or "fullheight"

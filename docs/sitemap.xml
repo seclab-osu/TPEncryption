@@ -3,22 +3,22 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>http://photoencryption.org/categories/</loc>
+    <loc>https://photoencryption.org/categories/</loc>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://photoencryption.org/tags/</loc>
+    <loc>https://photoencryption.org/tags/</loc>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://photoencryption.org/</loc>
+    <loc>https://photoencryption.org/</loc>
     <priority>0</priority>
   </url>
   
   <url>
-    <loc>http://photoencryption.org/home/</loc>
+    <loc>https://photoencryption.org/home/</loc>
   </url>
   
 </urlset>
