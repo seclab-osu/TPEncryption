@@ -1,0 +1,43 @@
+body {
+    margin: 0;
+    padding: 0;
+    /*border: 1px solid #ccc;*/
+}
+
+.box-row {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+    justify-content: space-between;
+}
+
+.box-col {
+    display: flex;
+    flex-direction: column;
+}
+
+.canvas-image {
+
+}
+
+.canvas-image-thumbnail {
+
+}
+
+.box-v-center {
+    justify-content: center;
+}
+
+.canvas-container {
+    width: 40%;
+}
+
+.canvas-image {
+    border: 1px solid gray;
+    margin: 0 0 0 10px;
+
+}
+
+.action-button {
+
+}
