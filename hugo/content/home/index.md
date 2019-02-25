@@ -1,5 +1,5 @@
 ---
-title: "Thumbnail Preserving Encryption"
+title: "Thumbnail-Preserving Encryption"
 draft: false
 weight: 0
 ---
