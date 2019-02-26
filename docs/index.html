@@ -67,6 +67,9 @@ Thumbnail Preserving Encryption
 
 <p><img src="home/privacy.png" alt="tpe image" style="border: 0px none; box-shadow: none; margin-top: 30px;"></p>
 
+<p><script src="tpe.js"></script>
+<link href="tpe.css" type="text/css" rel="stylesheet" /></p>
+
                         </div>
                         
                         
@@ -110,10 +113,6 @@ Thumbnail Preserving Encryption
             
             
             <a class="navbar-item" href="#paper">Paper</a>
-            
-            
-            
-            <a class="navbar-item" href="#demo">Demo</a>
             
             
             
@@ -208,95 +207,6 @@ In this paper we motivate the need for image encryption techniques which preserv
                 
                 
                 
-                <div class="section" id="demo">
-                    <div class="container">
-                        <h2 class="title is-2 has-text-centered">Demo</h2>
-                        
-                        <div class="markdown has-text-centered">
-                            
-<script src="tpe.js"></script>
-<link href="tpe.css" type="text/css" rel="stylesheet" />
-
-<section class="box-col">
-    <div><button id="try"> Try It </button></div>
-</section>
-
-<div id="ddemo" class="box-col">
-<section>
-    <!-- Select image -->
-    <div><input type="file" name="Browse" id="browse" accept="image/*" class="action-button"></div>
-    <span>
-    <div>Number of iterations:<input type="number" name="iterations" id="iterations" min="1" required> </div>
-    <div>&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;Block Size:<input type="number" name="blocksize" id="blocksize" min="1" required> </div>
-    <div id="abc">&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;Key:&#160;&#160;&#160;&#160;<input type="text" name="key" id="key" required> </div>
-    <div><button id="set" class="button">Set</button></div>
-    </span>
-    <!-- Original image -->
-    <div class="box-row">
-        <!-- image -->
-        <div class="canvas-container">
-            <div> Original Image </div>
-            <canvas class="canvas-image" id="canvas-og"></canvas>
-        </div>
-        <!-- thumbnail -->
-        <div class="canvas-container">
-            <div> Original Image Thumbnail </div>
-            <canvas class="canvas-image-thumbnail" id="canvas-ogt"></canvas>
-        </div>
-    </div>
-</section>
-<section>
-    <!-- Encrypt image -->
-    <div><button id="encrypt" class="button">Encrypt</button></div>
-
-    <div class="box-row">
-        <!-- image -->
-        <div class="canvas-container">
-            <div> Encrypted Image </div>
-            <canvas class="canvas-image" id="canvas-en"></canvas>
-        </div>
-        <!-- thumbnail -->
-        <div class="canvas-container">
-            <div> Encrypted Image Thumbnail </div>
-            <canvas class="canvas-image-thumbnail" id="canvas-ent"></canvas>
-        </div>
-    </div>
-</section>
-<section>
-    <!-- Decrypted image -->
-    <div><button id="decrypt" class="button">Decrypt</button></div>
-
-    <div class="box-row">
-        <!-- image -->
-        <div class="canvas-container">
-            <div> Decrypted Image</div>
-            <canvas class="canvas-image" id="canvas-de"></canvas>
-        </div>
-        <!-- thumbnail -->
-        <div class="canvas-container">
-            <div> Decrypted Image Thumbnail</div>
-            <canvas class="canvas-image-thumbnail" id="canvas-det"></canvas>
-        </div>
-    </div>
-</section>
-</div>
-
-                        </div>
-                        
-                    </div>
-                    
-                    <div class="container has-text-centered top-pad">
-    <a href="#top">
-        <i class="fa fa-arrow-up"></i>
-    </a>
-</div>
-
-                </div>
-                <div class="container"><hr></div>
-                
-                
-                
-                
                 <div class="section" id="code">
                     <div class="container">
                         <h2 class="title is-2 has-text-centered">Code</h2>
@@ -325,46 +235,40 @@ In this paper we motivate the need for image encryption techniques which preserv
                         <h2 class="title is-2 has-text-centered">People</h2>
                         
                         <div class="markdown has-text-centered">
-                            <div class="box-col">
-    <div class="box-row">
-        <div>
-            <image class="author-image" src="/authors/kimia.png"></image>
-            <div><a href="https://kimiatajik.com/"> Kimia Tajik </a></div>
-        </div>
-        <div>
-            <image class="author-image" src="/authors/akshith.png"></image>
-            <div><a href="https://akshithg.github.io/"> Akshith Gunasekaran </a></div>
-        </div>
+                            <div class="box-row">
+    <div>
+        <image class="author-image" src="/authors/kimia.png"></image>
+        <div><a href="https://www.linkedin.com/in/kimia-tajik-6680a05a/"> Kimia Tajik </a></div>
     </div>
-    <div class="box-row">
-        <div>
-            <image class="author-image" src="/authors/rhea.png"></image>
-            <div><a href="https://www.linkedin.com/in/rhea-dutta/"> Rhea Dutta </a></div>
-        </div>
-        <div>
-            <image class="author-image" src="/authors/brandon.png"></image>
-            <div><a href="https://b-mp-e.github.io/"> Brandon Ellis </a></div>
-        </div>
+    <div>
+        <image class="author-image" src="/authors/akshith.png"></image>
+        <div><a href="https://akshithg.github.io/" style="font-size: 12px"> Akshith Gunasekaran </a></div>
     </div>
-    <div class="box-row">
-        <div>
-            <image class="author-image" src="/authors/rakesh.png"></image>
-            <div><a href="https://eecs.oregonstate.edu/people/bobba-rakesh"> Rakesh B. Bobba </a></div>
-        </div>
-        <div>
-            <image class="author-image" src="/authors/mike.png"></image>
-            <div><a href="http://web.engr.oregonstate.edu/~rosulekm/"> Mike Rosulek </a></div>
-        </div>
+    <div>
+        <image class="author-image" src="/authors/rhea.png"></image>
+        <div><a href="https://www.linkedin.com/in/rhea-dutta/"> Rhea Dutta </a></div>
     </div>
-    <div class="box-row">
-        <div>
-            <image class="author-image" src="/authors/charles.png"></image>
-            <div><a href="https://web.cecs.pdx.edu/~cvwright/"> Charles V. Wright </a></div>
-        </div>
-        <div>
-            <image class="author-image" src="/authors/wu-chi.png"></image>
-            <div><a href="http://web.cecs.pdx.edu/~wuchi/"> Wu-chi Feng </a></div>
-        </div>
+    <div>
+        <image class="author-image" src="/authors/brandon.png"></image>
+        <div><a href="https://b-mp-e.github.io/"> Brandon Ellis </a></div>
+    </div>
+</div>
+<div class="box-row">
+    <div>
+        <image class="author-image" src="/authors/rakesh.png"></image>
+        <div><a href="https://eecs.oregonstate.edu/people/bobba-rakesh"> Rakesh B. Bobba </a></div>
+    </div>
+    <div>
+        <image class="author-image" src="/authors/mike.png"></image>
+        <div><a href="http://web.engr.oregonstate.edu/~rosulekm/"> Mike Rosulek </a></div>
+    </div>
+    <div>
+        <image class="author-image" src="/authors/charles.png"></image>
+        <div><a href="https://web.cecs.pdx.edu/~cvwright/"> Charles V. Wright </a></div>
+    </div>
+    <div>
+        <image class="author-image" src="/authors/wu-chi.png"></image>
+        <div><a href="http://web.cecs.pdx.edu/~wuchi/"> Wu-chi Feng </a></div>
     </div>
 </div>
 
