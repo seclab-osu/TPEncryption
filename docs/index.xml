@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Thumbnail Preserving Encryption</title>
-    <link>https://seclab-osu.github.io/TPEncryption/</link>
+    <link>http://localhost:1313/TPEncryption/</link>
     <description>Recent content on Thumbnail Preserving Encryption</description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <atom:link href="https://seclab-osu.github.io/TPEncryption/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/TPEncryption/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Thumbnail Preserving Encryption</title>
-      <link>https://seclab-osu.github.io/TPEncryption/home/</link>
+      <link>http://localhost:1313/TPEncryption/home/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://seclab-osu.github.io/TPEncryption/home/</guid>
-      <description>&lt;p&gt;Balancing Image Privacy and Usability&lt;/p&gt;&#xA;&lt;!-- raw HTML omitted --&gt;&#xA;&lt;!-- raw HTML omitted --&gt;&#xA;&lt;!-- raw HTML omitted --&gt;</description>
+      <guid>http://localhost:1313/TPEncryption/home/</guid>
+      <description>&lt;p&gt;Balancing Image Privacy and Usability&lt;/p&gt;&#xA;&lt;img src=&#34;./privacy.png&#34; alt=&#34;tpe image&#34; style=&#34;border: 0px none; box-shadow: none; margin-top: 30px;&#34;&gt;&#xA;&lt;script src=&#34;tpe.js&#34;&gt;&lt;/script&gt;&#xA;&lt;link href=&#34;tpe.css&#34; type=&#34;text/css&#34; rel=&#34;stylesheet&#34; /&gt;</description>
     </item>
   </channel>
 </rss>

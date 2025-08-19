@@ -2,12 +2,12 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://seclab-osu.github.io/TPEncryption/categories/</loc>
+    <loc>http://localhost:1313/TPEncryption/categories/</loc>
   </url><url>
-    <loc>https://seclab-osu.github.io/TPEncryption/tags/</loc>
+    <loc>http://localhost:1313/TPEncryption/tags/</loc>
   </url><url>
-    <loc>https://seclab-osu.github.io/TPEncryption/</loc>
+    <loc>http://localhost:1313/TPEncryption/</loc>
   </url><url>
-    <loc>https://seclab-osu.github.io/TPEncryption/home/</loc>
+    <loc>http://localhost:1313/TPEncryption/home/</loc>
   </url>
 </urlset>
