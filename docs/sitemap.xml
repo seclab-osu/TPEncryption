@@ -1,21 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
-  
   <url>
-    <loc>https://photoencryption.org/categories/</loc>
+    <loc>https://seclab-osu.github.io/TPEncryption/categories/</loc>
+  </url><url>
+    <loc>https://seclab-osu.github.io/TPEncryption/tags/</loc>
+  </url><url>
+    <loc>https://seclab-osu.github.io/TPEncryption/</loc>
+  </url><url>
+    <loc>https://seclab-osu.github.io/TPEncryption/home/</loc>
   </url>
-  
-  <url>
-    <loc>https://photoencryption.org/tags/</loc>
-  </url>
-  
-  <url>
-    <loc>https://photoencryption.org/</loc>
-  </url>
-  
-  <url>
-    <loc>https://photoencryption.org/home/</loc>
-  </url>
-  
 </urlset>

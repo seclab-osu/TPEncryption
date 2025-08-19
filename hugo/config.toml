@@ -1,4 +1,4 @@
-baseURL = "https://photoencryption.org/"
+baseURL = "https://seclab-osu.github.io/TPEncryption/"
 languageCode = "en-us"
 title = "Thumbnail Preserving Encryption"
 
