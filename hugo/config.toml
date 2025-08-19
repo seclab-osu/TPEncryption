@@ -6,5 +6,9 @@ theme = "introduction"
 publishDir = "../docs"
 
 [params]
-    [params.home]
-        introHeight              = "small"                 # Input either "medium" or "large" or "fullheight"
+
+[params.home]
+    introHeight = "small"
+
+[markup.goldmark.renderer]
+    unsafe= true
